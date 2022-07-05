@@ -54,8 +54,6 @@ jobs:
           cd openwrt-packages
           git clone https://github.com/lj8812/luci-app-adguardhome.git package/luci-app-adguardhome
           git clone https://github.com/kenzok78/luci-theme-argonne.git package/luci-theme-argonne
-          git clone https://github.com/xiaorouji/openwrt-passwall.git package/openwrt-passwall
-          git clone -b luci https://github.com/xiaorouji/openwrt-passwall.git package/luci-app-passwall
           git clone https://github.com/vernesong/OpenClash.git package/OpenClash
           
       - name: Update feeds
@@ -142,7 +140,6 @@ jobs:
           CONFIG_TARGET_KERNEL_PARTSIZE=256
           CONFIG_TARGET_ROOTFS_PARTSIZE=512
           CONFIG_TARGET_ROOTFS_TARGZ=y
-          CONFIG_PACKAGE_luci-app-passwall=y
           CONFIG_PACKAGE_luci-app-adguardhome=y
           CONFIG_PACKAGE_luci-app-openclash=y
           EOF
