@@ -11,10 +11,10 @@ on:
   push:
     branches: 
       - master
-  schedule:
-    - cron: 0 20 * * *
-  release:
-    types: [published]
+  # schedule:
+  #   - cron: 0 20 * * *
+  # release:
+  #   types: [published]
 
 jobs:
 
@@ -53,7 +53,10 @@ jobs:
           mkdir openwrt-packages
           cd openwrt-packages
           git clone https://github.com/lj8812/luci-app-adguardhome.git package/luci-app-adguardhome
+          git clone https://github.com/fw876/helloworld.git package/luci-app-helloworld
           git clone https://github.com/kenzok78/luci-theme-argonne.git package/luci-theme-argonne
+          git clone https://github.com/xiaorouji/openwrt-passwall.git package/openwrt-passwall
+          git clone -b luci https://github.com/xiaorouji/openwrt-passwall.git package/luci-app-passwall
           git clone https://github.com/vernesong/OpenClash.git package/OpenClash
           
       - name: Update feeds
@@ -144,6 +147,45 @@ jobs:
           CONFIG_PACKAGE_luci-app-openclash=y
           EOF
           
+          # passwall插件选择:
+          cat >> .config <<EOF
+          CONFIG_PACKAGE_luci-app-passwall=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Brook=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ChinaDNS_NG=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Haproxy=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Hysteria=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Kcptun=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_NaiveProxy=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_PDNSD=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Client=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Libev_Server=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks_Rust_Client=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Client=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_ShadowsocksR_Libev_Server=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Simple_Obfs=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_GO=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan_Plus=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_V2ray_Plugin=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray=y
+          CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Xray_Plugin=y
+          EOF
+          
+          # ShadowSocksR Plus+插件:
+          cat >> .config <<EOF
+          CONFIG_PACKAGE_luci-app-ssr-plus=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Shadowsocks_Rust=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_V2ray_plugin=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Xray=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Trojan=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Redsocks2=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_NaiveProxy=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_Kcptun=y
+          CONFIG_PACKAGE_luci-app-ssr-plus_INCLUDE_ShadowsocksR_Server=y
+          CONFIG_PACKAGE_luci-i18n-ssr-plus-zh-cn=y
+          EOF
+          
           # LuCI主题:
           cat >> .config <<EOF
           CONFIG_PACKAGE_luci-theme-argonne=y
@@ -179,10 +221,10 @@ jobs:
           EOF
           
           # 取消编译VMware镜像以及镜像填充 (不要删除被缩进的注释符号):
-          # cat >> .config <<EOF
-          # # CONFIG_TARGET_IMAGES_PAD is not set
-          # # CONFIG_VMDK_IMAGES is not set
-          # EOF
+          cat >> .config <<EOF
+          # CONFIG_TARGET_IMAGES_PAD is not set
+          # CONFIG_VMDK_IMAGES is not set
+          EOF
           # 
           # ========================固件定制部分结束========================
           # 
